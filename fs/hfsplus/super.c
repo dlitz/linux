@@ -500,6 +500,7 @@ static int hfsplus_fill_super(struct super_block *sb, void *data, int silent)
 	}
 
 	sb->s_d_op = &hfsplus_dentry_operations;
+	sb->s_export_op = &hfsplus_export_operations;
 	sb->s_root = d_make_root(root);
 	if (!sb->s_root) {
 		err = -ENOMEM;

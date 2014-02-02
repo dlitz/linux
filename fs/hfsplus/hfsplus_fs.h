@@ -446,6 +446,9 @@ void hfsplus_cat_set_perms(struct inode *inode, struct hfsplus_perm *perms);
 extern const struct inode_operations hfsplus_dir_inode_operations;
 extern const struct file_operations hfsplus_dir_operations;
 
+/* export.c */
+extern const struct export_operations hfsplus_export_operations;
+
 /* extents.c */
 int hfsplus_ext_cmp_key(const hfsplus_btree_key *, const hfsplus_btree_key *);
 int hfsplus_ext_write_extent(struct inode *);
