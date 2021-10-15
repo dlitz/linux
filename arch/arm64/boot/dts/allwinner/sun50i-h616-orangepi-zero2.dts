@@ -66,6 +66,11 @@
 	status = "okay";
 };
 
+&gpu {
+	mali-supply = <&reg_dcdcc>;
+	status = "okay";
+};
+
 /* USB 2 & 3 are on headers only. */
 
 &emac0 {
