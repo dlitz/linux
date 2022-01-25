@@ -347,6 +347,8 @@
 	status = "okay";
 };
 
+/delete-node/ &spi0;
+
 &uart0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart0_ph_pins>;
