@@ -14,6 +14,10 @@ dtbo-$(CONFIG_ARCH_SUNXI) += \
 	sun50i-a64-w1-gpio.dtbo \
 	sun50i-h5-analog-codec.dtbo \
 	sun50i-h5-cir.dtbo \
+	sun50i-h5-cpu-clock-1.0GHz-1.1v.dtbo \
+	sun50i-h5-cpu-clock-1.2GHz-1.3v.dtbo \
+	sun50i-h5-cpu-clock-1.3GHz-1.3v.dtbo \
+	sun50i-h5-gpio-regulator-1.3v.dtbo \
 	sun50i-h5-i2c0.dtbo \
 	sun50i-h5-i2c1.dtbo \
 	sun50i-h5-i2c2.dtbo \
