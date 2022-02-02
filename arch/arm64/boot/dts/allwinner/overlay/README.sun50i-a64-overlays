@@ -20,6 +20,7 @@ on supported boards, so this controller is not supported in provided overlays
 
 - i2c0
 - i2c1
+- pine64-7inch-lcd
 - pps-gpio
 - spi-add-cs1
 - spi-jedec-nor
@@ -43,6 +44,10 @@ I2C0 pins (SCL, SDA): PH0, PH1
 Activates TWI/I2C bus 1
 
 I2C1 pins (SCL, SDA): PH2, PH3
+
+### pine64-7inch-lcd
+
+Activates the Pine64 7" LCD on pine64/pine64so boards
 
 ### pps-gpio
 
