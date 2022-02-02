@@ -15,6 +15,7 @@
 	aliases {
 		serial0 = &uart0;
 		serial1 = &uart1;
+		serial9 = &r_uart;
 		ethernet0 = &emac;
 	};
 
