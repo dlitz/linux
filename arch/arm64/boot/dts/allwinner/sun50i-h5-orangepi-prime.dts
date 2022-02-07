@@ -25,6 +25,7 @@
 	aliases {
 		ethernet0 = &emac;
 		serial0 = &uart0;
+		ethernet1 = &rtl8723cs;
 	};
 
 	chosen {
@@ -174,6 +175,10 @@
 	bus-width = <4>;
 	non-removable;
 	status = "okay";
+
+	rtl8723cs: sdio_wifi@1 {
+		reg = <1>;
+	};
 };
 
 &ohci0 {
