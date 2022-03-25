@@ -67,3 +67,4 @@ obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
 obj-$(CONFIG_TMR_MANAGER)      += xilinx_tmr_manager.o
 obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
 obj-$(CONFIG_MODEM_POWER)	+= modem-power.o
+obj-$(CONFIG_SUNXI_ADDR_MGT)    += sunxi-addr/
