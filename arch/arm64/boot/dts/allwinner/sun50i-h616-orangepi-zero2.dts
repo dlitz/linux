@@ -58,6 +58,7 @@
 		vin-supply = <&reg_vcc5v>;
 		enable-active-high;
 		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
+		status = "okay";
 	};
 };
 
