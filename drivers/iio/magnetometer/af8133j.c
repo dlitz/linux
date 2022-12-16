@@ -79,7 +79,7 @@ static const struct iio_chan_spec_ext_info af8133j_ext_info[] = {
 	{ }
 };
 
-//	.info_mask_shared_by_type = , \
+/*	.info_mask_shared_by_type = , \*/
 
 #define AF8133J_CHANNEL(_axis) { \
 	.type = IIO_MAGN, \
