@@ -881,7 +881,7 @@ config FB_ATMEL
 
 config FB_SUN5I_EINK
 	tristate "eInk display Framebuffer Support (A13 based eBook readers)"
-	depends on FB
+	depends on FB && ARM && !ARM64
 	select FB_MODE_HELPERS
 	select FB_CFB_FILLRECT
 	select FB_CFB_COPYAREA
