@@ -143,7 +143,7 @@ static int ac200_i2c_probe(struct i2c_client *i2c)
 	return 0;
 }
 
-static int ac200_i2c_remove(struct i2c_client *i2c)
+static void ac200_i2c_remove(struct i2c_client *i2c)
 {
 	struct ac200_dev *ac200 = i2c_get_clientdata(i2c);
 
@@ -151,8 +151,6 @@ static int ac200_i2c_remove(struct i2c_client *i2c)
 
 	mfd_remove_devices(&i2c->dev);
 	regmap_del_irq_chip(i2c->irq, ac200->regmap_irqc);
-
-	return 0;
 }
 
 static const struct i2c_device_id ac200_ids[] = {
