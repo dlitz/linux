@@ -988,7 +988,9 @@ static int sun50i_a64_ccu_probe(struct platform_device *pdev)
 	/* Decrease the PLL AUDIO bias current to reduce noise. */
 	writel(0x10040000, reg + SUN50I_A64_PLL_AUDIO_BIAS_REG);
 
-	writel(0x515, reg + SUN50I_A64_PLL_MIPI_REG);
+	ret = of_property_read_u32_index(of_chosen, "p-boot,framebuffer-start", 0, &val);
+	if (ret)
+		writel(0x515, reg + SUN50I_A64_PLL_MIPI_REG);
 
 	/* Force the parent of TCON0 to PLL-MIPI */
 	val = readl(reg + SUN50I_A64_TCON0_REG);
