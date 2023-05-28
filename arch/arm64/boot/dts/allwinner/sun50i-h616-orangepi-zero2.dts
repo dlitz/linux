@@ -68,6 +68,15 @@
 	status = "okay";
 };
 
+
+/* USB 2 & 3 are on headers used by expansion board */
+&ehci2 {
+	status = "okay";
+};
+&ehci3 {
+	status = "okay";
+};
+
 &gpu {
 	mali-supply = <&reg_dcdcc>;
 	status = "okay";
