@@ -47,12 +47,23 @@ dtbo-$(CONFIG_ARCH_SUNXI) += \
 	sun50i-h6-uart1.dtbo \
 	sun50i-h6-uart2.dtbo \
 	sun50i-h6-uart3.dtbo \
-	sun50i-h6-w1-gpio.dtbo
+	sun50i-h6-w1-gpio.dtbo \
+	sun50i-h616-spi-spidev.dtbo \
+	sun50i-h616-spidev0_0.dtbo \
+	sun50i-h616-spidev1_0.dtbo \
+	sun50i-h616-spidev1_1.dtbo \
+	sun50i-h616-spidev1_2.dtbo \
+	sun50i-h616-ir.dtbo \
+	sun50i-h616-tft35_spi.dtbo \
+	sun50i-h616-mcp2515.dtbo \
+	sun50i-h616-ws2812.dtbo \
+	sun50i-h616-light.dtbo
 
 scr-$(CONFIG_ARCH_SUNXI) += \
 	sun50i-a64-fixup.scr \
 	sun50i-h5-fixup.scr \
-	sun50i-h6-fixup.scr
+	sun50i-h6-fixup.scr \
+	sun50i-h616-fixup.scr
 
 dtbotxt-$(CONFIG_ARCH_SUNXI) += \
 	README.sun50i-a64-overlays \
