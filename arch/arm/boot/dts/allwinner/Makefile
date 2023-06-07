@@ -195,6 +195,7 @@ DTC_FLAGS_sun8i-h3-nanopi-neo-air := -@
 DTC_FLAGS_sun8i-h3-zeropi := -@
 DTC_FLAGS_sun8i-h3-nanopi-neo := -@
 DTC_FLAGS_sun8i-h3-nanopi-r1 := -@
+DTC_FLAGS_sun8i-h3-nanopi-r1s := -@
 DTC_FLAGS_sun8i-h3-orangepi-pc := -@
 DTC_FLAGS_sun8i-h3-bananapi-m2-plus-v1.2 := -@
 DTC_FLAGS_sun8i-h3-orangepi-pc-plus := -@
@@ -233,6 +234,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
 	sun8i-h3-nanopi-neo.dtb \
 	sun8i-h3-nanopi-neo-air.dtb \
 	sun8i-h3-nanopi-r1.dtb \
+	sun8i-h3-nanopi-r1s.dtb \
 	sun8i-h3-orangepi-2.dtb \
 	sun8i-h3-orangepi-lite.dtb \
 	sun8i-h3-orangepi-one.dtb \

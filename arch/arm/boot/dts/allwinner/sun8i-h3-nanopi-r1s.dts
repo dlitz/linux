@@ -9,8 +9,8 @@
 #include <dt-bindings/leds/common.h>
 
 / {
-	model = "FriendlyARM NanoPi R1";
-	compatible = "friendlyarm,nanopi-r1", "allwinner,sun8i-h3";
+	model = "FriendlyElec NanoPi-R1S-H3";
+	compatible = "friendlyelec,nanopi-r1s-h3", "allwinner,sun8i-h3";
 
 	aliases {
 		serial1 = &uart1;
@@ -101,23 +101,14 @@
 	non-removable;
 	status = "okay";
 
+	/* compatible with rtl8189/ap6256 */
 	wifi: wifi@1 {
 		reg = <1>;
 		compatible = "brcm,bcm4329-fmac";
 		interrupt-parent = <&pio>;
-		interrupts = <6 10 IRQ_TYPE_LEVEL_LOW>; /* PG10 / EINT10 */
+		interrupts = <6 10 IRQ_TYPE_LEVEL_HIGH>; /* PG10 / EINT10 */
 		interrupt-names = "host-wake";
 	};
-};
-
-&mmc2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&mmc2_8bit_pins>;
-	vmmc-supply = <&reg_vcc3v3>;
-	vqmmc-supply = <&reg_vcc3v3>;
-	bus-width = <8>;
-	non-removable;
-	status = "okay";
 };
 
 &ohci1 {
@@ -159,11 +150,21 @@
 
 &usb_otg {
 	status = "okay";
-	dr_mode = "otg";
+	dr_mode = "peripheral";
 };
 
 &usbphy {
 	usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
 	usb0_vbus-supply = <&reg_usb0_vbus>;
 	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+
+	eeprom@51 {
+		compatible = "microchip,24c02";
+		reg = <0x51>;
+		pagesize = <16>;
+	};
 };
