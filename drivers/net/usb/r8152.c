@@ -7156,6 +7156,13 @@ static void r8153b_init(struct r8152 *tp)
 	rtl_tally_reset(tp);
 
 	tp->coalesce = 15000;	/* 15 us */
+
+	/* enable LEDs
+	 * LED0: activity
+	 * LED1: link 10/100/1000 Mbps */
+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_LEDSEL);
+	ocp_data = 0x78;
+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_LEDSEL, ocp_data);
 }
 
 static void r8153c_init(struct r8152 *tp)
