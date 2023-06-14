@@ -3,6 +3,7 @@
  * Copyright (C) 2019 Igor Pecovnik <igor@armbian.com>
  * Copyright (C) 2020 Jayantajit Gogoi <jayanta.gogoi525@gmail.com>
  * Copyright (C) 2020 Yu-Tung Chang <mtwget@gmail.com>
+ * Copyright (C) 2023 Darsey Litzenberger <dlitz@dlitz.net>
 */
 
 #include "sun8i-h3-nanopi.dtsi"
@@ -16,6 +17,26 @@
 		serial1 = &uart1;
 		ethernet0 = &emac;
 		ethernet1 = &wifi;
+		ethernet2 = &usb_ethernet;
+	};
+
+	reg_vcc_dram: vcc-dram {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-dram";
+		regulator-min-microvolt = <1500000>;
+		regulator-max-microvolt = <1500000>;
+		regulator-always-on;
+		regulator-boot-on;
+		enable-active-high;
+		gpio = <&r_pio 0 9 GPIO_ACTIVE_HIGH>; /* PL9 */
+		vin-supply = <&reg_vcc5v0>;
+	};
+
+	reg_vcc2v5: vcc2v5 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc2v5";
+		regulator-min-microvolt = <2500000>;
+		regulator-max-microvolt = <2500000>;
 	};
 
 	reg_gmac_3v3: gmac-3v3 {
@@ -41,6 +62,7 @@
 		gpios-states = <0x1>;
 		states = <1100000 0x0>,
 			 <1300000 0x1>;
+		vin-supply = <&reg_vcc5v0>;
 	};
 
 	wifi_pwrseq: wifi_pwrseq {
@@ -51,13 +73,25 @@
 	};
 
 	leds {
+		led-0 {
+			label = "nanopi:red:status";
+			function = LED_FUNCTION_STATUS;
+			color = <LED_COLOR_ID_RED>;
+		};
+
+		led-1 {
+			status = "disabled";
+		};
+
 		led-2 {
+			label = "nanopi:green:wan";
 			function = LED_FUNCTION_WAN;
 			color = <LED_COLOR_ID_GREEN>;
 			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>; /* PG11 */
 		};
 
 		led-3 {
+			label = "nanopi:green:lan";
 			function = LED_FUNCTION_LAN;
 			color = <LED_COLOR_ID_GREEN>;
 			gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 */
@@ -70,7 +104,15 @@
 };
 
 &ehci1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
 	status = "okay";
+
+	usb_ethernet: ethernet@1 {	/* hard-wired USB ethernet device */
+		compatible = "usbbda,8153";
+		reg = <1>;
+	};
 };
 
 &ehci2 {
@@ -90,6 +132,7 @@
 	ext_rgmii_phy: ethernet-phy@7 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <7>;
+		reset-gpios = <&pio 3 14 GPIO_ACTIVE_LOW>; /* PD14 */
 	};
 };
 
@@ -107,6 +150,7 @@
 		compatible = "brcm,bcm4329-fmac";
 		interrupt-parent = <&pio>;
 		interrupts = <6 10 IRQ_TYPE_LEVEL_HIGH>; /* PG10 / EINT10 */
+		// TODO(dlitz): Should the above be IRQ_TYPE_LEVEL_LOW like on other devices?
 		interrupt-names = "host-wake";
 	};
 };
@@ -116,11 +160,6 @@
 };
 
 &ohci2 {
-	status = "okay";
-};
-
-&reg_usb0_vbus {
-	gpio = <&r_pio 0 2 GPIO_ACTIVE_HIGH>; /* PL2 */
 	status = "okay";
 };
 
@@ -143,19 +182,21 @@
 		vbat-supply = <&reg_vcc3v3>;
 		vddio-supply = <&reg_vcc3v3>;
 		device-wakeup-gpios = <&pio 0 8 GPIO_ACTIVE_HIGH>; /* PA8 */
-		host-wakeup-gpios = <&pio 0 7 GPIO_ACTIVE_HIGH>; /* PA7 */
+		//host-wakeup-gpios = <&pio 0 7 GPIO_ACTIVE_HIGH>; /* PA7 */  /* host-wakeup-gpios is deprecated */
 		shutdown-gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>; /* PG13 */
+		interrupt-parent = <&pio>;
+		interrupts = <0 7 IRQ_TYPE_LEVEL_HIGH>; /* PA7 / EINT7 */
+		interrupt-names = "host-wakeup";
 	};
 };
 
 &usb_otg {
 	status = "okay";
-	dr_mode = "peripheral";
+	dr_mode = "otg";
 };
 
 &usbphy {
 	usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
-	usb0_vbus-supply = <&reg_usb0_vbus>;
 	status = "okay";
 };
 
@@ -167,4 +208,17 @@
 		reg = <0x51>;
 		pagesize = <16>;
 	};
+};
+
+&pio {
+	vcc-pa-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pc-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pd-supply = <&reg_vcc2v5>;	// VCC_PD
+	vcc-pe-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pf-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pg-supply = <&reg_vcc3v3>;	// VCC_PG
+};
+
+&r_pio {
+	vcc-pl-supply = <&reg_vcc3v3>;	// VCC_IO
 };
