@@ -38,6 +38,25 @@
 		};
 	};
 
+	reg_vcc_dram: vcc-dram {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-dram";
+		regulator-min-microvolt = <1500000>;
+		regulator-max-microvolt = <1500000>;
+		regulator-always-on;
+		regulator-boot-on;
+		enable-active-high;
+		gpio = <&r_pio 0 9 GPIO_ACTIVE_HIGH>; /* PL9 */
+		vin-supply = <&reg_vcc5v0>;
+	};
+
+	reg_vcc2v5: vcc2v5 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc2v5";
+		regulator-min-microvolt = <2500000>;
+		regulator-max-microvolt = <2500000>;
+	};
+
 	reg_gmac_3v3: gmac-3v3 {
 		compatible = "regulator-fixed";
 		regulator-name = "gmac-3v3";
@@ -61,6 +80,7 @@
 		gpios-states = <0x1>;
 		states = <1100000 0x0>,
 			 <1300000 0x1>;
+		vin-supply = <&reg_vcc5v0>;
 	};
 
 	wifi_pwrseq: wifi_pwrseq {
@@ -210,4 +230,17 @@
 		reg = <0x51>;
 		pagesize = <16>;
 	};
+};
+
+&pio {
+	vcc-pa-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pc-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pd-supply = <&reg_vcc2v5>;	// VCC_PD
+	vcc-pe-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pf-supply = <&reg_vcc3v3>;	// VCC_IO
+	vcc-pg-supply = <&reg_vcc3v3>;	// VCC_PG
+};
+
+&r_pio {
+	vcc-pl-supply = <&reg_vcc3v3>;	// VCC_IO
 };
