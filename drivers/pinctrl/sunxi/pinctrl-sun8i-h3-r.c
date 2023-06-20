@@ -81,7 +81,7 @@ static const struct sunxi_pinctrl_desc sun8i_h3_r_pinctrl_data = {
 	.pins = sun8i_h3_r_pins,
 	.npins = ARRAY_SIZE(sun8i_h3_r_pins),
 	.irq_banks = 1,
-	.pin_base = -1,   /* XXX This should fix [  +0.000591] gpio gpiochip1: Static allocation of GPIO base is deprecated, use dynamic allocation. */
+	.pin_base = PL_BASE,
 
 	.irq_read_needs_mux = true,
 	.disable_strict_mode = true,
