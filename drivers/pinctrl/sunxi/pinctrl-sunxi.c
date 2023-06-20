@@ -545,6 +545,8 @@ static int sunxi_pconf_get(struct pinctrl_dev *pctldev, unsigned pin,
 	u16 arg;
 	int ret;
 
+	dev_info(pctl->dev, "pin=%d, pin_base=%d\n", pin, pctl->desc->pin_base);	// XXX
+
 	pin -= pctl->desc->pin_base;
 
 	ret = sunxi_pconf_reg(pctl, pin, param, &reg, &shift, &mask);
@@ -604,6 +606,7 @@ static int sunxi_pconf_set(struct pinctrl_dev *pctldev, unsigned pin,
 	struct sunxi_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
 	int i;
 
+	dev_info(pctl->dev, "pin=%d, pin_base=%d\n", pin, pctl->desc->pin_base);	// XXX
 	pin -= pctl->desc->pin_base;
 
 	for (i = 0; i < num_configs; i++) {
@@ -698,6 +701,7 @@ static int sunxi_pinctrl_set_io_bias_cfg(struct sunxi_pinctrl *pctl,
 	if (uV == 0)
 		return 0;
 
+	dev_info(pctl->dev, "pin=%d, pin_base=%d\n", pin, pctl->desc->pin_base);	// XXX
 	pin -= pctl->desc->pin_base;
 	bank = pin / PINS_PER_BANK;
 
@@ -782,6 +786,7 @@ static void sunxi_pmx_set(struct pinctrl_dev *pctldev,
 	u32 reg, shift, mask;
 	unsigned long flags;
 
+	dev_info(pctl->dev, "pin=%d, pin_base=%d\n", pin, pctl->desc->pin_base);	// XXX
 	pin -= pctl->desc->pin_base;
 	sunxi_mux_reg(pctl, pin, &reg, &shift, &mask);
 
