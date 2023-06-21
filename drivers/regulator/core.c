@@ -2214,6 +2214,7 @@ struct regulator *_regulator_get(struct device *dev, const char *id,
 			 * provide a dummy.
 			 */
 			dev_warn(dev, "supply %s not found, using dummy regulator\n", id);
+			dump_stack();		/* DEBUG FIXME(dlitz) */  
 			rdev = dummy_regulator_rdev;
 			get_device(&rdev->dev);
 			break;
