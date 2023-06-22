@@ -9,6 +9,11 @@
 #include "sun8i-h3-nanopi.dtsi"
 #include <dt-bindings/leds/common.h>
 
+/* XXX FIXME(dlitz) For u-boot v2022.10 */
+#ifndef CLK_OSC32K_FANOUT
+# define CLK_OSC32K_FANOUT 1
+#endif
+
 / {
 	model = "FriendlyElec NanoPi-R1S-H3";
 	compatible = "friendlyelec,nanopi-r1s-h3", "allwinner,sun8i-h3";
@@ -77,12 +82,17 @@
 			label = "nanopi:red:status";
 			function = LED_FUNCTION_STATUS;
 			color = <LED_COLOR_ID_RED>;
+//			gpios = <&pio 0 10 GPIO_ACTIVE_HIGH>;	/* PA10 */
+//			status = "disabled";	/* DEBUG FIXME(dlitz) */  
 		};
 
 		led-1 {
 			status = "disabled";
 		};
 
+
+	/* DEBUG FIXME(dlitz) */  // Stealing WAN LED for gpio-fan
+#if 1
 		led-2 {
 			label = "nanopi:green:wan";
 			function = LED_FUNCTION_WAN;
@@ -96,7 +106,61 @@
 			color = <LED_COLOR_ID_GREEN>;
 			gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 */
 		};
+#endif
+
+		// TODO: SMT fan connector
+			// DEBUG FIXME(dlitz) - This is the fan port
+#if 0
+		led-4 {
+			label = "nanopi::fan";
+			function = "fan";	// XXX LED_FUNCTION_*
+			gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;	/* PL5 */
+		};
+#endif
 	};
+
+#if 0
+	fan0: gpio_fan {
+		compatible = "gpio-fan";
+		label = "GPIO fan";
+		//gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;	/* PL5 */
+		gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>, /* PG11 - WAN LED*/
+			<&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 - LAN LED*/
+		#cooling-cells = <2>;
+		gpio-fan,speed-map = <0 0>, <3000 1>, <6000 2>, <9000 3>;
+		alarm-gpios = <&pio 0 10 GPIO_ACTIVE_HIGH>;	/* PA10 */
+	};
+#else
+	fan0: gpio_fan {
+		compatible = "gpio-fan";
+		label = "GPIO fan";
+		gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;	/* PL5 */
+		#cooling-cells = <2>;
+		gpio-fan,speed-map = <0 0>, <10000 1>;
+	};
+#endif
+
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+#if 1
+		brom {	/* entire bootrom */
+			compatible = "nvmem-rmem";
+			reg = <0xffff0000 0x10000>;
+		};
+#elif 0
+		n-bootrom {	/* non-secure bootrom */
+			compatible = "nvmem-rmem";
+			reg = <0xffff0000 0x8000>;
+		};
+		s-bootrom {	/* "secure" bootrom (technically should overlap n-bootrom) */
+			compatible = "nvmem-rmem";
+			reg = <0xffff8000 0x8000>;
+		};
+#endif
+	};
+
 };
 
 &cpu0 {
@@ -125,6 +189,12 @@
 	phy-supply = <&reg_gmac_3v3>;
 	phy-handle = <&ext_rgmii_phy>;
 	phy-mode = "rgmii-id";
+
+	//nvmem-cells = <&eeprom_mac_address_writable>;
+	//nvmem-cells = <&eeprom_mac_address>;
+	//nvmem-cells = <&spi_mac_address>;
+	//nvmem-cell-names = "mac-address";
+
 	status = "okay";
 };
 
@@ -133,6 +203,67 @@
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <7>;
 		reset-gpios = <&pio 3 14 GPIO_ACTIVE_LOW>; /* PD14 */
+		phy-io-supply = <&reg_vcc2v5>;	// Is this the correct spot?  Check for  [  +0.000235] dwmac-sun8i 1c30000.ethernet: supply phy-io not found, using dummy regulator
+	};
+};
+
+// normally-unpopulated 8-SOIC footprint designated U14
+&spi0 {
+	status = "okay";
+
+	spiflash: flash@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "mxicy,mx25l12805d", "jedec,spi-nor";
+		reg = <0>;
+		//status = "disabled";
+		status = "okay";
+
+		//vdd-supply = <&reg_vcc3v3>;	// DTC_CHK complains about this
+
+		spi-max-frequency = <104000000>;
+		m25p,fast-read;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+#if 0
+			spl@0 {
+				reg = <0x0 0x8000>;	/* 32KiB */
+			};
+
+			u-boot@8000 {
+				reg = <0x8000 0xe8000>;	/* 928 KiB */
+			};
+#else
+			u-boot-sunxi-with-spl@0 {
+				reg = <0x0 0xf0000>;	/* 960 KiB */
+			};
+#endif
+
+			u-boot-env@f0000 {
+				reg = <0xf0000 0x10000>;	/* 64 KiB */
+			};
+
+// TODO: random-seed?
+
+			//partition@1 {
+			//partition-other {
+			//other@8000 {
+			/*
+			art: art@8000 {
+				compatible = "nvmem-cells";
+				reg = <0x8000 0xff8000>;
+				#address-cells = <1>;
+				#size-cells = <1>;
+				spi_mac_address: ethernet-address@0 {
+					reg = <0x0 0x6>;
+				};
+			};
+			*/
+		};
 	};
 };
 
@@ -202,11 +333,26 @@
 
 &i2c0 {
 	status = "okay";
+	clock-frequency = <400000>;
 
 	eeprom@51 {
-		compatible = "microchip,24c02";
+		/* Microchip 24AA025E48T-I/OT */
+		compatible = "microchip,24c02", "atmel,24c02";
 		reg = <0x51>;
 		pagesize = <16>;
+		vcc-supply = <&reg_vcc3v3>;
+		label = "i2c-eeprom";
+
+		//read-only;
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		eeprom_mac_address_writable: mac-address@0 {
+			reg = <0x0 0x6>;
+		};
+		eeprom_mac_address: mac-address@fa {
+			reg = <0xfa 0x6>;
+		};
 	};
 };
 
@@ -222,3 +368,48 @@
 &r_pio {
 	vcc-pl-supply = <&reg_vcc3v3>;	// VCC_IO
 };
+
+#if 1
+&cpu_thermal {
+	trips {
+		cpu_less_warm_trip: cpu-warm {
+			temperature = <25000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+		cpu_warm_trip: cpu-warm {
+			temperature = <30000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+		cpu_warmer_trip: cpu-warm {
+			temperature = <35000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+	};
+	cooling-maps {
+		cpu-hot-limit {
+			contribution = <1>;
+		};
+		map0 {
+			trip = <&cpu_less_warm_trip>;
+			//cooling-device = <&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+			cooling-device = <&fan0 1 1>;
+			contribution = <1>;
+		};
+		map1 {
+			trip = <&cpu_warm_trip>;
+			//cooling-device = <&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+			cooling-device = <&fan0 2 2>;
+			contribution = <1>;
+		};
+		map2 {
+			trip = <&cpu_warmer_trip>;
+			//cooling-device = <&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+			cooling-device = <&fan0 3 3>;
+			contribution = <1>;
+		};
+	};
+};
+#endif
