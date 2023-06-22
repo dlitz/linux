@@ -369,7 +369,7 @@
 	vcc-pl-supply = <&reg_vcc3v3>;	// VCC_IO
 };
 
-#if 1
+#if 0
 &cpu_thermal {
 	trips {
 		cpu_less_warm_trip: cpu-warm {
