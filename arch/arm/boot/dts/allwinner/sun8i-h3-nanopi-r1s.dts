@@ -19,6 +19,24 @@
 		ethernet1 = &wifi;
 	};
 
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		ramoops: ramoops@50000000 {
+			compatible = "ramoops";
+			reg = <0x50000000 0x80000>;	/* 512 KiB */
+			record-size = <0x4000>;		/* 16 KiB */
+			console-size = <0x20000>;	/* 128 KiB */
+			ftrace-size = <0x20000>;	/* 128 KiB */
+			pmsg-size = <0x20000>;		/* 128 KiB */
+			ecc-size = <16>;
+			max-reason = <3>;	/* KMSG_DUMP_EMERG */
+			status = "disabled";
+		};
+	};
+
 	reg_gmac_3v3: gmac-3v3 {
 		compatible = "regulator-fixed";
 		regulator-name = "gmac-3v3";
