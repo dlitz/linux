@@ -165,6 +165,40 @@
 	};
 };
 
+// normally-unpopulated 8-SOIC footprint designated U14
+&spi0 {
+	status = "okay";
+
+	spiflash: flash@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "mxicy,mx25l12805d", "jedec,spi-nor";
+		reg = <0>;
+		//status = "disabled";	/* normally unpopulated */
+
+		//vdd-supply = <&reg_vcc3v3>;	// DTC_CHK complains about this
+
+		spi-max-frequency = <104000000>;
+		m25p,fast-read;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			u-boot-sunxi-with-spl@0 {
+				reg = <0x0 0xf0000>;	/* 960 KiB */
+			};
+
+			u-boot-env@f0000 {
+				reg = <0xf0000 0x10000>;	/* 64 KiB */
+			};
+
+			// TODO: Other stuff here?  A recovery filesystem?  pstore space?
+		};
+	};
+};
+
 &mmc1 {
 	vmmc-supply = <&reg_vcc3v3>;
 	vqmmc-supply = <&reg_vcc3v3>;
@@ -231,11 +265,29 @@
 
 &i2c0 {
 	status = "okay";
+	clock-frequency = <400000>;
 
-	eeprom@51 {
-		compatible = "microchip,24c02";
+	eeprom0: eeprom@51 {
+		/* Microchip 24AA025E48T-I/OT */
+		compatible = "microchip,24c02", "atmel,24c02";
 		reg = <0x51>;
 		pagesize = <16>;
+		vcc-supply = <&reg_vcc3v3>;
+		label = "i2c-eeprom";
+
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		status = "disabled";	/* normally unpopulated */
+
+		eeprom0_writable: eeprom@0 {
+			reg = <0x0 0x80>;
+		};
+		/* nothing useful between 0x80 and 0x7a.  It's all-FF and read-only. */
+		eeprom0_mac_address: mac-address@fa {
+			reg = <0xfa 0x6>;
+			read-only;
+		};
 	};
 };
 
