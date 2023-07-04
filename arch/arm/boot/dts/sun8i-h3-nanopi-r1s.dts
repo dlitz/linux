@@ -116,6 +116,15 @@
 			gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 */
 		};
 	};
+
+	fan0: gpio_fan {
+		compatible = "gpio-fan";
+		label = "GPIO fan";
+		gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;	/* PL5 */
+		#cooling-cells = <2>;
+		gpio-fan,speed-map = <0 0>, <10000 1>;
+		//status = "disabled";	/* normally unpopulated */
+	};
 };
 
 &cpu0 {
@@ -241,3 +250,45 @@
 &r_pio {
 	vcc-pl-supply = <&reg_vcc3v3>;	// VCC_IO
 };
+
+#if 0
+&cpu_thermal {
+	trips {
+		cpu_less_warm_trip: cpu-warm {
+			temperature = <25000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+		cpu_warm_trip: cpu-warm {
+			temperature = <30000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+		cpu_warmer_trip: cpu-warm {
+			temperature = <35000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+	};
+	cooling-maps {
+		cpu-hot-limit {
+			contribution = <1>;
+		};
+		map0 {
+			trip = <&cpu_less_warm_trip>;
+			cooling-device = <&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+			contribution = <1>;
+		};
+		map1 {
+			trip = <&cpu_warm_trip>;
+			cooling-device = <&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+			contribution = <1>;
+		};
+		map2 {
+			trip = <&cpu_warmer_trip>;
+			cooling-device = <&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+			contribution = <1>;
+		};
+	};
+};
+#endif
