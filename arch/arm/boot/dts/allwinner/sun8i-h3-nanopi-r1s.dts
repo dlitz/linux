@@ -158,6 +158,7 @@
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <7>;
 		reset-gpios = <&pio 3 14 GPIO_ACTIVE_LOW>; /* PD14 */
+		phy-io-supply = <&reg_vcc2v5>;	// Is this the correct spot?  Check for  [  +0.000235] dwmac-sun8i 1c30000.ethernet: supply phy-io not found, using dummy regulator
 	};
 };
 
