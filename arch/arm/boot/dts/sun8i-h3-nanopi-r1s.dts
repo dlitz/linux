@@ -20,6 +20,25 @@
 		ethernet2 = &usb_ethernet;
 	};
 
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		// Reserve 1 MiB of DRAM at 256 MiB for the ramoops pstore buffer.
+		// TODO FIXME: Reserve the last MiB of DRAM for the ramoops pstore buffer.
+		ramoops: ramoops@10000000 {	// TODO: ramoops@1ff00000
+			compatible = "ramoops";
+			reg = <0x10000000 0x100000>;	// TODO: reg = <0x1ff00000 0x100000>;
+			record-size = <0x4000>;
+			console-size = <0x4000>;
+			ftrace-size = <0x4000>;
+			pmsg-size = <0x4000>;
+			//status = "disabled";	// TODO
+			status = "okay";
+		};
+	};
+
 	reg_vcc_dram: vcc-dram {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc-dram";
