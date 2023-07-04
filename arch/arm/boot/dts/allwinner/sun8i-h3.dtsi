@@ -272,6 +272,20 @@
 			};
 		};
 	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		// Allwinner H3 internal bootrom
+		brom@ffff0000 {
+			compatible = "nvmem-rmem";
+			reg = <0xffff0000 0x10000>;
+			no-map;
+			read-only;
+		};
+	};
 };
 
 &ccu {
