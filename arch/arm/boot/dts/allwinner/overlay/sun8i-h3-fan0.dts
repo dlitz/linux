@@ -1,0 +1,13 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "friendlyelec,nanopi-r1s-h3";
+
+	fragment@0 {
+		target = <&fan0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+};

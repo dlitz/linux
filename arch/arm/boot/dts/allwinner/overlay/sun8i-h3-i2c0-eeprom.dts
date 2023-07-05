@@ -1,0 +1,29 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "friendlyelec,nanopi-r1s-h3";
+
+	fragment@0 {
+		target-path = "/aliases";
+		__overlay__ {
+			i2c0 = "/soc/i2c@1c2ac00";
+			eeprom0 = "/soc/i2c@1c2ac00/eeprom@51";
+		};
+	};
+
+	fragment@1 {
+		target = <&i2c0>;
+		__overlay__ {
+			status = "okay";
+			clock-frequency = <400000>;
+		};
+	};
+
+	fragment@2 {
+		target = <&eeprom0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+};
