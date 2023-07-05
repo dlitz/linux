@@ -32,8 +32,10 @@
 			reg = <0x10000000 0x100000>;	// TODO: reg = <0x1ff00000 0x100000>;
 			record-size = <0x4000>;
 			console-size = <0x4000>;
-			ftrace-size = <0x4000>;
+			ftrace-size = <0x80000>;
 			pmsg-size = <0x4000>;
+			max-reason = <0x7fffffff>;
+			//flags = <1>;
 			//status = "disabled";	// TODO
 			status = "okay";
 		};
