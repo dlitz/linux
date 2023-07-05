@@ -142,6 +142,11 @@
 	usb_ethernet: ethernet@1 {	/* hard-wired USB ethernet device */
 		compatible = "usbbda,8153";
 		reg = <1>;
+		/* Bits 15:12 - 0000b - feature control: active low; Option 1
+		 * Bits 11:8  - 0000b - LEDSEL2 (unconnected): LED Off
+		 * Bits 7:4   - 0111b - LEDSEL1 (yellow): Link 1000/100/10 Mbps
+		 * Bits 3:0   - 1000b - LEDSEL0 (green): Activity */
+		realtek,led-data = <0x0078>;
 	};
 };
 
