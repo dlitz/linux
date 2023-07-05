@@ -123,7 +123,7 @@
 		gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;	/* PL5 */
 		#cooling-cells = <2>;
 		gpio-fan,speed-map = <0 0>, <10000 1>;
-		//status = "disabled";	/* normally unpopulated */
+		status = "disabled";	/* normally unpopulated */
 	};
 };
 
