@@ -20,6 +20,7 @@
 #define RTL_CHIP_8723CS_CG	3
 #define RTL_CHIP_8723CS_VF	4
 #define RTL_CHIP_8723CS_XX	5
+#define RTL_CHIP_8703BS		7
 #define RTL_EPATCH_SIGNATURE	"Realtech"
 #define RTL_EPATCH_SIGNATURE_V2	"RTBTCore"
 #define RTL_ROM_LMP_8703B	0x8703
@@ -145,6 +146,17 @@ static const struct id_table ic_id_table[] = {
 			 IC_MATCH_FL_HCIBUS,
 	  .lmp_subver = RTL_ROM_LMP_8703B,
 	  .chip_type = RTL_CHIP_8723CS_XX,
+	  .hci_bus = HCI_UART,
+	  .config_needed = true,
+	  .has_rom_version = true,
+	  .fw_name  = "rtl_bt/rtl8723cs_xx_fw.bin",
+	  .cfg_name = "rtl_bt/rtl8723cs_xx_config" },
+
+	/* 8703BS */
+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
+			 IC_MATCH_FL_HCIBUS,
+	  .lmp_subver = RTL_ROM_LMP_8703B,
+	  .chip_type = RTL_CHIP_8703BS,
 	  .hci_bus = HCI_UART,
 	  .config_needed = true,
 	  .has_rom_version = true,

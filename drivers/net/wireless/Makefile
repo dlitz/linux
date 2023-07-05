@@ -25,3 +25,11 @@ obj-$(CONFIG_WLAN_VENDOR_ZYDAS) += zydas/
 
 obj-$(CONFIG_WLAN) += legacy/
 obj-$(CONFIG_WLAN) += virtual/
+obj-$(CONFIG_RTL8189ES) += rtl8189es/
+obj-$(CONFIG_RTL8189FS) += rtl8189fs/
+obj-$(CONFIG_RTL8192EU) += rtl8192eu/
+obj-$(CONFIG_88XXAU) += rtl8812au/
+obj-$(CONFIG_RTL8821CU) += rtl8811cu/
+obj-$(CONFIG_RTL8822BU) += rtl88x2bu/
+obj-$(CONFIG_RTL8723DS) += rtl8723ds/
+obj-$(CONFIG_RTL8723DU) += rtl8723du/
