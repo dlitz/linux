@@ -27,9 +27,9 @@
 
 		// Reserve 1 MiB of DRAM at 256 MiB for the ramoops pstore buffer.
 		// TODO FIXME: Reserve the last MiB of DRAM for the ramoops pstore buffer.
-		ramoops: ramoops@10000000 {	// TODO: ramoops@1ff00000
+		ramoops: ramoops@50000000 {	// TODO: ramoops@5ff00000
 			compatible = "ramoops";
-			reg = <0x10000000 0x100000>;	// TODO: reg = <0x1ff00000 0x100000>;
+			reg = <0x50000000 0x100000>;	// TODO: reg = <0x5ff00000 0x100000>;
 			record-size = <0x4000>;
 			console-size = <0x4000>;
 			ftrace-size = <0x80000>;
