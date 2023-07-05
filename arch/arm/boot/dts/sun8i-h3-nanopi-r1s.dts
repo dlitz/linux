@@ -25,19 +25,16 @@
 		#size-cells = <1>;
 		ranges;
 
-		// Reserve 1 MiB of DRAM at 256 MiB for the ramoops pstore buffer.
-		// TODO FIXME: Reserve the last MiB of DRAM for the ramoops pstore buffer.
-		ramoops: ramoops@50000000 {	// TODO: ramoops@5ff00000
+		ramoops: ramoops@50000000 {
 			compatible = "ramoops";
-			reg = <0x50000000 0x100000>;	// TODO: reg = <0x5ff00000 0x100000>;
-			record-size = <0x4000>;
-			console-size = <0x4000>;
-			ftrace-size = <0x80000>;
-			pmsg-size = <0x4000>;
-			max-reason = <0x7fffffff>;
-			//flags = <1>;
-			//status = "disabled";	// TODO
-			status = "okay";
+			reg = <0x50000000 0x80000>;	/* 512 KiB */
+			record-size = <0x4000>;		/* 16 KiB */
+			console-size = <0x20000>;	/* 128 KiB */
+			ftrace-size = <0x20000>;	/* 128 KiB */
+			pmsg-size = <0x20000>;		/* 128 KiB */
+			ecc-size = <16>;
+			max-reason = <3>;	/* KMSG_DUMP_EMERG */
+			status = "disabled";
 		};
 	};
 
