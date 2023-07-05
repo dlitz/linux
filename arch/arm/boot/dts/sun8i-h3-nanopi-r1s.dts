@@ -9,6 +9,8 @@
 #include "sun8i-h3-nanopi.dtsi"
 #include <dt-bindings/leds/common.h>
 
+#define SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED 0
+
 / {
 	model = "FriendlyElec NanoPi-R1S-H3";
 	compatible = "friendlyelec,nanopi-r1s-h3", "allwinner,sun8i-h3";
@@ -115,7 +117,7 @@
 			gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 */
 		};
 	};
-
+#if SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED
 	fan0: gpio_fan {
 		compatible = "gpio-fan";
 		label = "GPIO fan";
@@ -124,6 +126,7 @@
 		gpio-fan,speed-map = <0 0>, <10000 1>;
 		status = "disabled";	/* normally unpopulated */
 	};
+#endif /* SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED */
 };
 
 &cpu0 {
@@ -170,15 +173,16 @@
 };
 
 // normally-unpopulated 8-SOIC footprint designated U14
+#if SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED
 &spi0 {
-	status = "okay";
+	//status = "okay";
 
-	spiflash: flash@0 {
+	spiflash: spiflash@0 {
 		#address-cells = <1>;
 		#size-cells = <1>;
 		compatible = "mxicy,mx25l12805d", "jedec,spi-nor";
 		reg = <0>;
-		//status = "disabled";	/* normally unpopulated */
+		status = "disabled";	/* normally unpopulated */
 
 		//vdd-supply = <&reg_vcc3v3>;	// DTC_CHK complains about this
 
@@ -202,6 +206,7 @@
 		};
 	};
 };
+#endif /* SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED */
 
 &mmc1 {
 	vmmc-supply = <&reg_vcc3v3>;
@@ -268,9 +273,10 @@
 	status = "okay";
 };
 
+#if SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED
 &i2c0 {
-	status = "okay";
-	clock-frequency = <400000>;
+	//status = "okay";
+	//clock-frequency = <400000>;
 
 	eeprom0: eeprom@51 {
 		/* Microchip 24AA025E48T-I/OT */
@@ -278,7 +284,7 @@
 		reg = <0x51>;
 		pagesize = <16>;
 		vcc-supply = <&reg_vcc3v3>;
-		label = "i2c-eeprom";
+		label = "eeprom";
 
 		#address-cells = <1>;
 		#size-cells = <1>;
@@ -295,6 +301,7 @@
 		};
 	};
 };
+#endif /* SUN8I_H3_NANOPI_R1S_INCLUDE_UNPOPULATED */
 
 &pio {
 	vcc-pa-supply = <&reg_vcc3v3>;	// VCC_IO

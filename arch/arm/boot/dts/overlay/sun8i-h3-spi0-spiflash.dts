@@ -1,0 +1,52 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "friendlyelec,nanopi-r1s-h3";
+
+	fragment@0 {
+		target-path = "/aliases";
+		__overlay__ {
+			spi0 = "/soc/spi@1c68000";
+			spiflash = "/soc/spi@1c68000/spiflash@0";
+		};
+	};
+
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			spiflash@0 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				compatible = "mxicy,mx25l12805d", "jedec,spi-nor";
+				reg = <0>;
+				//status = "disabled";	/* normally unpopulated */
+				status = "okay";	/* normally unpopulated */
+
+				//vdd-supply = <&reg_vcc3v3>;	// DTC_CHK complains about this
+
+				spi-max-frequency = <104000000>;
+				m25p,fast-read;
+
+				partitions {
+					compatible = "fixed-partitions";
+					#address-cells = <1>;
+					#size-cells = <1>;
+
+					u-boot-sunxi-with-spl@0 {
+						reg = <0x0 0xf0000>;	/* 960 KiB */
+					};
+
+					u-boot-env@f0000 {
+						reg = <0xf0000 0x10000>;	/* 64 KiB */
+					};
+
+					// TODO: Other stuff here?  A recovery filesystem?  pstore space?
+				};
+			};
+		};
+	};
+};
