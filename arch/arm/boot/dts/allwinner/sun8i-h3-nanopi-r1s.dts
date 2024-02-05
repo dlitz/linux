@@ -71,13 +71,25 @@
 	};
 
 	leds {
+		led-0 {
+			label = "nanopi:red:status";
+			function = LED_FUNCTION_STATUS;
+			color = <LED_COLOR_ID_RED>;
+		};
+
+		led-1 {
+			status = "disabled";
+		};
+
 		led-2 {
+			label = "nanopi:green:wan";
 			function = LED_FUNCTION_WAN;
 			color = <LED_COLOR_ID_GREEN>;
 			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>; /* PG11 */
 		};
 
 		led-3 {
+			label = "nanopi:green:lan";
 			function = LED_FUNCTION_LAN;
 			color = <LED_COLOR_ID_GREEN>;
 			gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 */
