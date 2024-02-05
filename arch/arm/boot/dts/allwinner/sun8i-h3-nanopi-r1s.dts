@@ -138,11 +138,6 @@
 	status = "okay";
 };
 
-&reg_usb0_vbus {
-	gpio = <&r_pio 0 2 GPIO_ACTIVE_HIGH>; /* PL2 */
-	status = "okay";
-};
-
 &uart1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart1_pins>;
@@ -174,7 +169,6 @@
 
 &usbphy {
 	usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
-	usb0_vbus-supply = <&reg_usb0_vbus>;
 	status = "okay";
 };
 
