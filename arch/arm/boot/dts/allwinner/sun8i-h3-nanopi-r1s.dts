@@ -245,6 +245,7 @@
 	uart-has-rtscts;
 	status = "okay";
 
+	// TODO(dlitz) - Test bluetooth support
 	bluetooth {
 		compatible = "brcm,bcm43438-bt";
 		clocks = <&rtc CLK_OSC32K_FANOUT>;
