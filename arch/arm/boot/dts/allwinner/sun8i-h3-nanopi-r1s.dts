@@ -157,6 +157,7 @@
 	ext_rgmii_phy: ethernet-phy@7 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <7>;
+		reset-gpios = <&pio 3 14 GPIO_ACTIVE_LOW>; /* PD14 */
 	};
 };
 
