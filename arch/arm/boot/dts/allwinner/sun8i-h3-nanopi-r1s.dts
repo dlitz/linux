@@ -185,8 +185,10 @@
 		vbat-supply = <&reg_vcc3v3>;
 		vddio-supply = <&reg_vcc3v3>;
 		device-wakeup-gpios = <&pio 0 8 GPIO_ACTIVE_HIGH>; /* PA8 */
-		host-wakeup-gpios = <&pio 0 7 GPIO_ACTIVE_HIGH>; /* PA7 */
 		shutdown-gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>; /* PG13 */
+		interrupt-parent = <&pio>;
+		interrupts = <0 7 IRQ_TYPE_LEVEL_HIGH>; /* PA7 / EINT7 */
+		interrupt-names = "host-wakeup";
 	};
 };
 
